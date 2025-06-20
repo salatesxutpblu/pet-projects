@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой киносписок</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .add-movie {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .rating {
+            display: flex;
+            gap: 10px;
+        }
+        .rating input {
+            width: auto;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .movies-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .movie-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .movie-poster {
+            background-color: #eee;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+        .movie-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        .movie-info {
+            color: #666;
+            margin: 5px 0;
+        }
+        .movie-rating {
+            color: #ff9800;
+            font-size: 20px;
+            margin: 10px 0;
+        }
+        .movie-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        .delete-btn {
+            background-color: #f44336;
+        }
+        .filter {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎬 Мой киносписок</h1>
+    
+    <div class="add-movie">
+        <h2>Добавить фильм</h2>
+        <div class="form-group">
+            <label for="title">Название:</label>
+            <input type="text" id="title" placeholder="Например: Крестный отец">
+        </div>
+        <div class="form-group">
+            <label class="year" for="year">Год:</label>
+            <input type="number" id="year" placeholder="2023">
+        </div>
+        <div class="form-group">
+            <label for="genre">Жанр:</label>
+            <select id="genre">
+                <option value="Комедия">Комедия</option>
+                <option value="Драма">Драма</option>
+                <option value="Фантастика">Фантастика</option>
+                <option value="Ужасы">Ужасы</option>
+                <option value="Боевик">Боевик</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Оценка:</label>
+            <div class="rating">
+                <label><input type="radio" name="rating" value="1"> 1★</label>
+                <label><input type="radio" name="rating" value="2"> 2★</label>
+                <label><input type="radio" name="rating" value="3" checked> 3★</label>
+                <label><input type="radio" name="rating" value="4"> 4★</label>
+                <label><input type="radio" name="rating" value="5"> 5★</label>
+            </div>
+        </div>
+        <button id="add-btn">Добавить фильм</button>
+    </div>
+
+    <div class="filter">
+        <label for="genre-filter">Фильтр по жанру:</label>
+        <select id="genre-filter">
+            <option value="Все">Все жанры</option>
+            <option value="Комедия">Комедия</option>
+            <option value="Драма">Драма</option>
+            <option value="Фантастика">Фантастика</option>
+            <option value="Ужасы">Ужасы</option>
+            <option value="Боевик">Боевик</option>
+        </select>
+        <button id="reset-filter">Сбросить</button>
+    </div>
+
+    <div class="movies-list">
+        <!-- Пример карточки фильма -->
+        <!--<div class="movie-card">
+            <div class="movie-poster">🎞️</div>
+            <div class="movie-title">Крестный отец</div>
+            <div class="movie-info">1972 • Драма</div>
+            <div class="movie-rating">★★★★★</div>
+            <div class="movie-actions">
+                <button class="edit-btn">Изменить оценку</button>
+                <button class="delete-btn">Удалить</button>
+            </div>
+        </div>-->
+
+        <!-- Еще один пример -->
+        <!--<div class="movie-card">
+            <div class="movie-poster">🎞️</div>
+            <div class="movie-title">Назад в будущее</div>
+            <div class="movie-info">1985 • Фантастика</div>
+            <div class="movie-rating">★★★★☆</div>
+            <div class="movie-actions">
+                <button class="edit-btn">Изменить оценку</button>
+                <button class="delete-btn">Удалить</button>
+            </div>
+        </div>-->
+    </div>
+    <script>
+         let movieName = document.querySelector('#title')
+         let movieYear = document.querySelector('#year')
+         let movieGenre = document.querySelector('#genre')
+         let movieRating = document.querySelector('.rating')
+         let movieAdd = document.querySelector('#add-btn')
+         let container = document.querySelector('.movies-list')
+         let genreFilter = document.querySelector('#genre-filter')
+         let resetGenre = document.querySelector('#reset-filter')
+         let movies = getMovies()
+         
+         render()
+         
+
+         function saveMovies() {
+            localStorage.setItem('movies', JSON.stringify(movies))
+         }
+
+         function getMovies() {
+            let movies = localStorage.getItem('movies')
+            return movies ? JSON.parse(movies) : []
+            
+         }
+         
+         function starsGenerator(number) {
+            number = Number(number)
+            let stars = ''
+            for (let a = 0;a < number; a++) {
+               stars += '★'
+            }
+            return stars
+         }
+
+        function render(moviesFiltered = null) {
+            saveMovies()
+            let content = []
+            let moviesToRender = moviesFiltered ? moviesFiltered : getMovies()
+
+            for ([i, movie] of moviesToRender.entries()) {
+                let movieHtml = `<div class="movie-card">
+                <div class="movie-poster">🎞️</div>
+                <div class="movie-title">${movie.title}</div>
+                <div class="movie-info">${movie.year} • ${movie.genre}</div>
+                <div class="movie-rating">${starsGenerator(movie.rating)}</div>
+                <div data-movie-id="${i}" class="movie-actions">
+                    <button class="edit-btn">Изменить оценку</button>
+                    <button class="delete-btn">Удалить</button>
+                </div>
+            </div>`
+             content.push(movieHtml)
+            } 
+            container.innerHTML = content.join('\n')
+
+
+
+        }
+
+
+
+         movieAdd.addEventListener('click', function() {
+            let movie = {
+                title: movieName.value,
+                year: movieYear.value,
+                genre: movieGenre.value,
+                rating: document.querySelector("[name='rating']:checked").value
+            }
+
+            movies.push(movie)
+            render()
+         })
+
+         window.addEventListener('click', function(event) {
+            let el = event.target.closest('[data-movie-id]')
+            if (!el) {
+                return
+            }
+            let id = Number(el.dataset.movieId)
+            if (event.target.closest('.delete-btn')) {
+            movies.splice(id, 1)
+            render()
+        }
+        if (event.target.closest('.edit-btn')) {
+            let movie = movies[id]
+            console.log(id)
+            let newStars = Number(prompt('Какую оценку вы хотите поставить?'))
+            console.log(newStars)
+            if (isNaN(newStars)) {
+                return
+            }
+            if (newStars > 5) {
+                newStars = 5
+            }
+            if (newStars < 1) {
+                newStars = 1
+            }
+            console.log(movie)
+            movie.rating = Number(newStars)
+            render()
+         }
+         })
+         genreFilter.addEventListener('change', function() {
+            let genre = this.value
+            if (genre === 'Все') {
+             render()
+             return
+            }
+            let filteredMovies = movies.filter(function(movie) {
+                return movie.genre === genre
+            })
+            render(filteredMovies)
+         })
+        
+         resetGenre.addEventListener('click', function() {
+            genreFilter.value = 'Все'
+            render()
+         })
+
+    </script>
+</body>
+</html>

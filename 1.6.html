@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>This is the title</title>
+        <script>
+            function number1 (arr) {
+               let res = 0
+               for (let a = 0; a < arr.length; a++) {
+                res = res + arr[a] * arr[a]
+               }
+               console.log(res)
+            } 
+
+            function numbers2 (arr) {
+               let res = 0
+               for (let a = 0; a < arr.length; a++) {
+                res = res + Math.sqrt(arr[a])
+               }
+               console.log(res)
+            } 
+            function numbers3 (arr) {
+                let a = 0
+                let res = 0
+                while (a < arr.length) {
+                  if (arr[a] > 0) {
+                  res += arr[a]
+                  }
+                  a++
+                }
+                return res
+            } 
+
+            function numbers4 (arr) {
+                let a = 0
+                let res = 0
+                while (a < arr.length) {
+                  if (arr[a] > 0 && arr[a] < 10) {
+                  res += arr[a]
+                  }
+                  a++
+                }
+                return res
+            } 
+
+            let b = numbers4([0, 12323232, 2, -10])
+            console.log(b)
+         </script>
+        </head>
+        <body>
+            <h1>1.6</h1>
+        </body>
+        </html>

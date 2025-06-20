@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Expense Tracker</title>
+        <style>
+            .light-theme {
+                background-color: white;
+            }
+            .dark-theme {
+                background-color: black;
+            }
+            .container {
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+                margin: auto;
+                width: 500px;
+                text-align: center;
+                border: 2px solid brown;
+            }
+            .list {
+                display: flex;
+                flex-direction: row;
+                gap: 20px;
+                justify-content: space-between;
+            }
+            select {
+                width: 150px;
+                margin: auto;
+            }
+            button {
+                width: 150px;
+                margin: auto;
+            }
+            input {
+                width: 150px;
+                margin: auto;
+            }
+            .expenditure {
+                color: red;
+            }
+            .income-text {
+                color:chartreuse;
+            }
+            .date {
+                font-size: 10px;
+            }
+            h3, h2, h1, p, label {
+                color:cornflowerblue;
+            }
+        </style>
+	</head>
+	<body id="body" class="light-theme">
+        <div class="container">
+            <h1>Expense Tracker</h1>
+            <label for="enable-theme">Тёмная тема</label>
+            <input class="enable-theme" type="checkbox">
+            <h2>Баланс</h2>
+            <p>Всего: <span id="all-money">0</span></p>
+            <p>Доход: <span id="money">0</span></p>
+            <p>Расход: <span id="money-clear">0</span></p>
+            <select id="change-category">
+                <option value="food">Еда</option>
+                <option value="transport">Транспорт</option>
+                <option value="housing">Жильё</option>
+                <option value="other">Прочее</option>
+                <option value="income">Доход</option>
+            </select>
+            <input id="amount" type="text">
+            <button id="btn-add">Добавить</button>
+            <h3>Фильтр</h3>
+            <select id="change-filter">
+                <option value="all">По всему</option>
+                <option value="date">По дате</option>
+            </select>            
+            <div class="list">
+                <div class="food">
+                <h3>Еда</h3>
+                </div>
+                <div class="transport">
+                <h3>Транспорт</h3>
+                </div>
+                <div class="housing">
+                    <h3>Жильё</h3>
+                </div>
+                <div class="other">
+                    <h3>Прочее</h3>
+                </div>
+                <div class="income">
+                    <h3>Доход</h3>
+                </div>
+            </div>
+
+        </div>
+        <script>
+            let htmlContainerFood = document.querySelector('.food')
+            let htmlContainerTransport = document.querySelector('.transport')
+            let htmlContainerHousing = document.querySelector('.housing')
+            let htmlContainerOther = document.querySelector('.other')
+            let htmlContainerIncome = document.querySelector('.income')
+            let changeCategory = document.querySelector('#change-category')
+            let allMoney = document.querySelector('#all-money')
+            let money = document.querySelector('#money')
+            let moneyClear = document.querySelector('#money-clear')
+            let typeAmount = document.querySelector('#amount')
+            let addButton = document.querySelector('#btn-add')
+            let elements = document.querySelectorAll('.expenditure');
+            let changeFilter = document.querySelector('#change-filter')
+            let enableTheme = document.querySelector('.enable-theme')
+            let transactions = getTransactions()
+              if (enableTheme.checked) {
+                    document.getElementById('body').classList.add('dark-theme');
+                } else {
+                    document.getElementById('body').classList.remove('dark-theme');
+                }
+            render()
+
+
+                function saveTransactions() {
+                    localStorage.setItem('transactions', JSON.stringify(transactions))
+                }
+
+                function getTransactions() {
+                    let transactions = localStorage.getItem('transactions')
+                    if (transactions === null) {
+                        return []
+                    }
+                    return JSON.parse(transactions)
+                }
+
+            function render() {
+                saveTransactions()
+                let contentFood = [`<h3>Еда</h3>`]
+                let contentTransport = [`<h3>Транспорт</h3>`]
+                let contentHousing = [`<h3>Жильё</h3>`]
+                let contentOther = [`<h3>Прочее</h3>`]
+                let contentIncome = [`<h3>Доход</h3>`]
+                let filteredTransactions = getFilteredTransactions()
+                let rashod = 0
+                let dohod = 0
+                let vsego = 0
+                for ([i, transaction] of filteredTransactions.entries()) {
+                    if (transaction.category === 'food'
+                     || transaction.category === 'other'
+                      || transaction.category === 'transport'
+                       || transaction.category === 'housing') {
+                        rashod = rashod + Number(transaction.amount)
+                       }
+                       if (transaction.category === 'food') {
+                        contentFood.push(`<p data-transaction-id="${i}" class="expenditure">${transaction.amount}</p>
+                        <p class="date">${transaction.date}</p>`)
+                       }
+                       if (transaction.category === 'other') {
+                        contentOther.push(`<p data-transaction-id="${i}" class="expenditure">${transaction.amount}</p>
+                        <p class="date">${transaction.date}</p>`)
+                       }
+                       if (transaction.category === 'transport') {
+                        contentTransport.push(`<p data-transaction-id="${i}" class="expenditure">${transaction.amount}</p>
+                        <p class="date">${transaction.date}</p>`)
+                       }
+                       if (transaction.category === 'housing') {
+                        contentHousing.push(`<p data-transaction-id="${i}" class="expenditure">${transaction.amount}</p>
+                        <p class="date">${transaction.date}</p>`)
+                       }
+                       if (transaction.category === 'income') {
+                        dohod = dohod + Number(transaction.amount)
+                        contentIncome.push(`<p data-transaction-id="${i}" class="income-text">${transaction.amount}</p>
+                        <p class="date">${transaction.date}</p>`)
+                       }  
+                       vsego = vsego + Number(transaction.amount) 
+                }
+                htmlContainerFood.innerHTML = contentFood.join('\n')
+                htmlContainerTransport.innerHTML = contentTransport.join('\n')
+                htmlContainerHousing.innerHTML = contentHousing.join('\n')
+                htmlContainerOther.innerHTML = contentOther.join('\n')
+                htmlContainerIncome.innerHTML = contentIncome.join('\n')
+                moneyClear.textContent = rashod
+                money.textContent = dohod
+                allMoney.textContent = vsego
+            }
+            addButton.addEventListener('click', function() {
+                let transaction = {
+                    amount:Number(typeAmount.value),
+                    category:changeCategory.value,
+                    date:new Date().toLocaleDateString("fr-CA", {year:"numeric", month: "2-digit", day:"2-digit"})
+                }
+                if (!transaction.amount) {
+                    alert('Введите число')
+                    return
+                }
+                transactions.push(transaction)
+                render()
+            })
+              window.addEventListener('click', function(event) {
+                let el = event.target.closest('[data-transaction-id]')
+                let res = ''
+                if (!el) {
+                    return
+                }
+                let id = el.dataset.transactionId
+                  if (event.target.tagName === 'P') {
+                    res = confirm('Вы точно хотите удалить эту строку?')
+                 }
+                 if (res === true) {
+                    transactions.splice(id, 1)
+                    render()
+                 }
+              })
+
+              changeFilter.addEventListener('change', function() {
+                render()
+              })
+
+              function getFilteredTransactions() {
+             let status = changeFilter.value
+            if (status === 'all') {
+                return transactions
+            }
+            let currentDate = new Date().toLocaleDateString("fr-CA", {year:"numeric", month: "2-digit", day:"2-digit"})
+            let currentDay = currentDate.slice(8, 10)
+            let filteredTransactions = transactions.filter(function(transaction) {
+                if (transaction.date === currentDate) {
+                    return true
+                }
+                for (let a = 30; a > 0; a--) {
+                if (transaction.date.slice(8, 10 === a)) {
+                    return true
+                }
+                }
+            })
+            return filteredTransactions
+              }
+
+              enableTheme.addEventListener('change', function() {
+                if (enableTheme.checked) {
+                    document.getElementById('body').classList.add('dark-theme');
+                } else {
+                    document.getElementById('body').classList.remove('dark-theme');
+                }
+            })
+        </script>
+	</body>
+</html>

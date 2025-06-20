@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Калькулятор валют</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #3c3c3c;
+      font-family: 'Press Start 2P', cursive;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-image: url('https://www.transparenttextures.com/patterns/green-dust-and-scratches.png');
+    }
+
+    .calculator {
+      background: #2a401c;
+      border: 8px solid #4e7934;
+      padding: 20px;
+      border-radius: 0;
+      box-shadow: 0 0 20px #000;
+      width: 300px;
+    }
+
+    .calculator h1 {
+      font-size: 16px;
+      color: #aaffaa;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      color: #ffffff;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 12px;
+      border: 4px solid #7a3f1d;
+      background-color: #c2b280;
+      color: #000;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #ffaa00;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <h1>💰 Обменник</h1>
+    <label for="usd">💵 USD (Доллар):</label>
+    <input type="text" id="usd" placeholder="Введите доллары" />
+
+    <label for="rub">💴 RUB (Рубли):</label>
+    <input type="text" id="rub" placeholder="Введите рубли" />
+  </div>
+
+  <script>
+
+      init()
+
+      async function getRate() {
+        let response = await fetch('https://openexchangerates.org/api/latest.json?app_id=885a7e7dff524f648231648c8dcb55bb&symbols=RUB')
+        response = await response.json()
+        return response.rates.RUB
+      }
+
+      async function init() {
+        let dollars = document.querySelector('#usd')
+        let rub = document.querySelector('#rub')
+        let currentCurse = await getRate()
+
+
+
+        dollars.addEventListener('input', function() {
+          let value = dollars.value.replace(/[,\s]/gi, '')
+          let dollarsToRub = Number(value) * Number(currentCurse)
+          rub.value = formatCurrency(dollarsToRub)
+        })
+        rub.addEventListener('input', function() {
+          let value = rub.value.replace(/[,\s]/gi, '')
+          let rubToDollars = Number(value) / Number(currentCurse)
+          dollars.value = formatCurrency(rubToDollars)
+        })
+      }
+
+      function formatCurrency(number) {
+        number = Number(number).toFixed(2)
+        return new Intl.NumberFormat("ru-RU").format(number)
+      }
+  </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+  <style>
+  </style>
+	<body>
+        <h1>промисы</h1>
+		<script>
+            async function testPromise() {
+                return new Promise(function(resolve, reject) {
+                    setTimeout(function() {
+                        resolve({name: 'илюша'})
+
+                    }, 1000)
+                })
+            }
+            async function test() {
+                testPromise().then(function(user) {
+                    console.log(user)
+                })
+            }
+            test()
+
+		</script>
+	</body>
+</html>

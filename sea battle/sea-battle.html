@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Морской бой</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #1d2b1f;
+      font-family: 'Press Start 2P', cursive;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      margin: 20px;
+      color: #00ff00;
+      text-shadow: 1px 1px 2px #000;
+    }
+
+    .game-container {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .board-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .board-label {
+      margin-bottom: 10px;
+      color: #00ff00;
+      font-size: 12px;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(10, 40px);
+      grid-template-rows: repeat(10, 40px);
+      gap: 2px;
+      border: 4px solid #008000;
+      background-color: #3c5e3c;
+    }
+
+    .cell {
+      width: 40px;
+      height: 40px;
+      background-color: #7abf7a;
+      border: 2px solid #3d703d;
+      box-sizing: border-box;
+      cursor: pointer;
+    }
+    .cell-flipped {
+      width: 40px;
+      height: 40px;
+      background-color: #ffffff;
+      border: 2px solid #ffffff;
+      box-sizing: border-box;
+      cursor: pointer;
+    }
+
+    .cell:hover {
+      background-color: #aaffaa;
+    }
+
+    .controls {
+      margin-top: 30px;
+    }
+
+    button {
+      font-family: 'Press Start 2P', cursive;
+      background-color: #00aa00;
+      color: white;
+      border: 2px solid #005500;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #00ff00;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <h1>Морской бой</h1>
+
+  <div class="game-container">
+    <div class="board-container">
+      <div class="board-label">Игрок</div>
+      <div class="board" id="player-board"></div>
+    </div>
+
+    <div class="board-container">
+      <div class="board-label">Противник</div>
+      <div class="board" id="enemy-board"></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="start-btn">Начать игру</button>
+  </div>
+
+  <script>
+    let statusGame = false
+    let startBtn = document.querySelector('.start-btn')
+    let playerBoard = []
+    let enemyBoard = []
+    let randomCell = ''
+
+    function createBoard(id, status) {
+       let content = [] 
+       let board = document.getElementById(id)
+       if (status === 'first') {
+        for (let i = 0; i < 100; i++) {
+        let cellObject = {
+          hasShip: false,
+          hit: false,
+          miss: false,
+          status: false,
+          id: i,
+          class: 'cell',
+          dataId: id
+        }
+        if (id === 'player-board') {
+          playerBoard.push(cellObject)
+        } else {
+          enemyBoard.push(cellObject)
+        }
+        content.push(`<div data-cell-id="${i}" data-id="${id}" class="${cellObject.class}"></div>`)
+       }
+      }
+      if (status === 'unfirst') {
+        console.log('dasasds')
+          for ([i, cellObject] of enemyBoard.entries()) {
+          content.push((`<div data-cell-id="${i}" data-id="${id}" class="${cellObject.class}"></div>`))
+        board.innerHTML = content.join('\n')
+        }
+      }
+     board.innerHTML = content.join('\n')
+    }
+
+    createBoard('player-board', 'first');
+    createBoard('enemy-board', 'first');
+    randomShips('enemy-board')
+
+    window.addEventListener('click', function(event) {
+      if (statusGame !== true) {
+        return
+      }
+      let el = event.target.closest('[data-cell-id]')
+      if (!el) {
+        return
+      }
+      let boardPlayer = el.dataset.id
+      let id = el.dataset.cellId
+      let cellPlayer = ''
+      if (boardPlayer === 'player-board') {
+        return
+      } else {
+        if (enemyBoard[id].miss === true) {
+          return
+        }
+        if (enemyBoard[id].hit === true) {
+          return
+        }
+        if (enemyBoard[id].hasShip === false ) {
+          enemyBoard[id].miss === true
+        }
+        if (enemyBoard[id].hasShip === true) {
+          enemyBoard[id].hit === true
+          if (enemyBoard[id - 1].hasShip === true && enemyBoard[id + 1].hasShip === true) {
+            enemyBoard[id - 10].miss === true
+            enemyBoard[id + 10].miss === true
+          }
+          if (enemyBoard[id - 1].hasShip === true && enemyBoard[id + 1].hasShip === false) {
+            enemyBoard[id - 10].miss === true
+            enemyBoard[id + 10].miss === true
+            enemyBoard[id - 11].miss === true
+            enemyBoard[id + 11].miss === true
+            enemyBoard[id + 1].miss === true
+          }
+          if (enemyBoard[id - 1].hasShip === false && enemyBoard[id + 1].hasShip === true) {
+            enemyBoard[id - 10].miss === true
+            enemyBoard[id + 10].miss === true
+            enemyBoard[id - 9].miss === true
+            enemyBoard[id + 9].miss === true
+            enemyBoard[id - 1].miss === true
+          }
+        }
+        for (cellObject of enemyBoard) {
+          if (cellObject.miss === true) {
+            cellObject.class = 'cell flipped'
+          }
+        }
+        createBoard('enemy-board', 'unfirst');
+        }
+      }
+    )
+
+    startBtn.addEventListener('click', function() {
+      statusGame = true
+    })
+    function randomShips(board) {
+      let random1 = [1,2,3,4,5,6,7,8,9,10]
+      random1 = random1.sort(() => Math.random() - 0.5);
+      let ships = [1,1,1,1,2,2,2,3,3,4]
+      ships = ships.sort(() => Math.random() - 0.5);
+      for (let a = 0; a < 10; a++) {
+          randomCell = String(random1[a]) + String(random1[a])
+          randomCell = Number(randomCell)
+          if (board === 'enemy-board') {
+            if (ships[a] === 1) {
+              console.log(randomCell)
+               enemyBoard[Number(randomCell)].hasShip = true
+            }
+            if (ships[a] === 2) {
+               enemyBoard[Number(randomCell)].hasShip = true
+              enemyBoard[Number(randomCell) + 1].hasShip = true
+            }
+            if (ships[a] === 3) {
+               enemyBoard[Number(randomCell)].hasShip = true
+               enemyBoard[Number(randomCell) + 1].hasShip = true
+               enemyBoard[Number(randomCell) + 2].hasShip = true
+            }
+            if (ships[a] === 4) {
+               enemyBoard[Number(randomCell)].hasShip = true
+               enemyBoard[Number(randomCell) + 1].hasShip = true
+               enemyBoard[Number(randomCell) + 2].hasShip = true
+               enemyBoard[Number(randomCell) + 3].hasShip = true    
+            }
+          }
+      }
+      createBoard('enemy-board', 'unfirst')
+      console.log(enemyBoard)
+    }
+
+  </script>
+</body>
+</html>

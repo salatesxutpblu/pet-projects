@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pomodoro Таймер</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #1e1e2f;
+      color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 6rem;
+      margin: 20px 0;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background: #4e4e7e;
+      color: white;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #6b6bb2;
+    }
+
+    .counter {
+      font-size: 1.2rem;
+      margin-top: 10px;
+      color: #aaa;
+    }
+
+    @media (max-width: 500px) {
+      h1 {
+        font-size: 4rem;
+      }
+
+      button {
+        font-size: 1rem;
+        padding: 8px 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1 id="time"><span id="minutes">25</span>:<span id="seconds">00</span></h1>
+  <div class="buttons">
+    <button id="start">Старт</button>
+    <button id="reset">Сброс</button>
+  </div>
+  <p class="counter">Завершено: <span id="count">0</span></p>
+
+  <script>
+    let timer = document.querySelector('#time')
+    let seconds = document.querySelector('#seconds')
+    let minutes = document.querySelector('#minutes')
+    let buttonStart = document.querySelector('#start')
+    let countTomatoes = document.querySelector('#count')
+    let resetTomatoes = document.querySelector('#reset')
+
+    let interval = null
+    buttonStart.addEventListener('click', function() {
+      if (buttonStart.textContent === 'Старт') {
+        buttonStart.textContent = 'Пауза'
+        interval = setInterval(function() {
+      let secondsTimer = seconds.textContent
+      let minutesTimer = minutes.textContent
+      if (secondsTimer === '00' || secondsTimer === '0') {
+        minutes.innerHTML = Number(minutesTimer) - 1
+        seconds.innerHTML = '59'
+      } else {
+        seconds.innerHTML = Number(secondsTimer) - 1
+      }
+      if ((minutes.textContent === '00' || minutes.textContent === '0')
+       && (seconds.textContent === '00' || seconds.textContent === '0')) {
+      buttonStart.textContent = 'Старт'
+        minutes.textContent = '25'
+        seconds.textContent = '00'
+        countTomatoes.textContent = Number(countTomatoes.textContent) + 1
+        clearInterval(interval)
+       }
+      }, 1000)
+      } else if (buttonStart.textContent === 'Пауза') {
+        clearInterval(interval)
+        buttonStart.textContent = 'Старт'
+      }
+    })
+
+    resetTomatoes.addEventListener('click', function() {
+      clearInterval(interval)
+      minutes.textContent = '25'
+      seconds.textContent = '00'
+      buttonStart.textContent = 'Старт'
+      countTomatoes.textContent = '0'
+    })
+  </script>
+</body>
+</html>

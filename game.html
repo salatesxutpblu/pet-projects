@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Камень, ножницы, бумага</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .game-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        .choices {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .result {
+            margin: 20px 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .scores {
+            display: flex;
+            justify-content: space-around;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Камень, ножницы, бумага</h1>
+        <div class="choices">
+            <button id="rock">Камень</button>
+            <button id="scissors">Ножницы</button>
+            <button id="paper">Бумага</button>
+        </div>
+        <div class="result" id="result">Выберите вариант!</div>
+        <div class="scores">
+            <div>Вы: <span id="player-score">0</span></div>
+            <div>Компьютер: <span id="computer-score">0</span></div>
+        </div>
+    </div>
+    <script>
+        let a = document.querySelector('#rock')
+        let b = document.querySelector('#scissors')
+        let c = document.querySelector('#paper')
+        let d = document.querySelector('#player-score')
+        let e = document.querySelector('#computer-score')
+
+        let rock = 'rock'
+        let paper = 'paper'
+        let scissors = 'scissors'
+
+        let playerWins = 0
+        let computerWins = 0
+
+        let playerItem = ''
+        let items = [rock, scissors, paper]
+
+        resetGame()
+
+        function resetGame() {
+            computerItem = items[Math.ceil(Math.random() * 3)]
+        }
+        function condition() {
+        if (playerItem === computerItem) {
+            playerWins = playerWins + 1
+            d.textContent = playerWins
+            computerWins = computerWins + 1
+            e.textContent = computerWins
+            resetGame()
+        } else if (playerItem === rock && computerItem === scissors || playerItem === scissors && computerItem === paper ||
+         playerItem === paper && computerItem === rock) {
+            playerWins = playerWins + 1
+            d.textContent = playerWins
+            resetGame()
+        } else {
+                computerWins = computerWins + 1
+                e.textContent = computerWins
+                resetGame()
+        }
+        }
+        a.addEventListener('click', function() {
+            playerItem = rock
+            condition()
+        })
+        b.addEventListener('click', function() {
+            playerItem = scissors
+            condition()
+        })
+        c.addEventListener('click', function() {
+            playerItem = paper
+            condition()
+        })
+
+    </script>
+</body>
+</html>

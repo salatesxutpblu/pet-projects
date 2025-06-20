@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Игра на память</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Press Start 2P', monospace;
+      background-color: #3c763d;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+      user-select: none;
+    }
+
+    h1 {
+      font-size: 20px;
+      color: #f9f9f9;
+      text-shadow: 2px 2px #222;
+    }
+
+    #game {
+      display: grid;
+      grid-template-columns: repeat(4, 80px);
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+      width: 400px;
+      margin: auto;
+    }
+
+    .card {
+      width: 80px;
+      height: 80px;
+      background-color: #4b5320;
+      border: 4px solid #2e2e2e;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: #fff;
+      position: relative;
+      transition: transform 0.3s;
+    }
+
+    .card.flipped {
+      background-color: #d4d4d4;
+      color: #222;
+    }
+
+    .card.matched {
+      background-color: #5cb85c;
+      border-color: #3d8b3d;
+      cursor: default;
+    }
+
+    #reset {
+      margin-top: 20px;
+      background: #4b5320;
+      color: #fff;
+      border: 2px solid #2e2e2e;
+      padding: 10px 20px;
+      font-family: 'Press Start 2P', monospace;
+      cursor: pointer;
+    }
+
+    #reset:hover {
+      background: #5f6f3a;
+    }
+
+    @media (max-width: 500px) {
+      #game {
+        grid-template-columns: repeat(4, 60px);
+      }
+
+      .card {
+        width: 60px;
+        height: 60px;
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>🧱 Игра на память</h1>
+  <div id="game">
+  
+  </div>
+  <button id="reset">🔄 Сбросить</button>
+
+  <script>
+    let resetBtn = document.querySelector('#reset')
+    let containerGame = document.querySelector('#game')
+    let win = 0
+    let tempCards = []
+    let cards = []
+    let uniqueSymbols = ['🧱', '🙂', '👀', '👻', '💢', '🐶', '🌸', '🐝']
+    let symbols = []
+
+    for (let a = 0; a < 2; a++) {
+      symbols = [...symbols, ...uniqueSymbols]
+    }
+    generateCards()
+     function generateCards() {
+     symbols = symbols.sort(() => Math.random() - 0.5); 
+     cards = []
+      for (let a = 0; a < symbols.length; a++) {
+      let randomCard = {
+        id:a,
+        card:'',
+        class:'card'
+      }
+      cards.push(randomCard)
+      }
+      cards = cards.sort(() => Math.random() - 0.5); 
+      render()
+     }
+     function render() {
+      let content = [] 
+      for (let a = 0; a < cards.length; a++) {
+        content.push(`<div data-card-id="${a}" class="${cards[a].class}" data-symbol="${cards[a].card}">${cards[a].card}</div>`)
+      }
+      containerGame.innerHTML = content.join('\n')
+      setTimeout(function() {
+      if (win === 16) {
+        alert('Вы выиграли супер игру!')
+        win = 0
+      }
+      }, 100)
+
+     }
+
+     window.addEventListener('click', function(event) {
+      let el = event.target.closest('[data-card-id]')
+      if (!el) {
+        return
+      }
+      
+      let id = el.dataset.cardId
+      let card = cards[id]
+      if (card.card !== '') {
+        return
+      }
+      tempCards.push(card)
+      card.class = 'card flipped'
+      card.card = symbols[card.id]
+
+      if (tempCards.length === 2) {
+       
+        if (tempCards[0].card === tempCards[1].card) {
+          tempCards[0].card = symbols[tempCards[0].id]
+          tempCards[0].class = 'card flipped'
+          tempCards[1].class = 'card flipped'
+          win = win + 2
+          tempCards[1].card = symbols[tempCards[1].id]
+          tempCards = []
+        } else {
+          setTimeout(function() {
+            console.log(tempCards)
+            for (let tempCard of tempCards) {
+              tempCard.class = 'card'
+              tempCard.card = ''
+            }
+            tempCards = []
+            render()
+          }, 1000)
+        }
+      }
+
+      render()
+     })
+
+     resetBtn.addEventListener('click', function() {
+      generateCards()
+     })
+
+  </script>
+</body>
+</html>

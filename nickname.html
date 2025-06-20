@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Генератор игровых ников</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #nickname {
+            font-size: 24px;
+            margin: 20px;
+            padding: 10px;
+            border: 1px dashed #ccc;
+            min-height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Генератор игровых ников</h1>
+    <div id="nickname">Здесь появится ваш ник</div>
+    <button class="button-password">Сгенерировать ник</button>
+    <script>
+        const adjectives = [
+    "Свирепый", "Летучий", "Невидимый", "Громовой", "Сверхзвуковой",
+    "Космический", "Ледяной", "Огненный", "Темный", "Ядовитый",
+    "Могучий", "Хитрый", "Быстрый", "Серебряный", "Золотой"
+];
+
+const nouns = [
+    "Дракон", "Воин", "Маг", "Разбойник", "Рыцарь",
+    "Ниндзя", "Охотник", "Чародей", "Тролль", "Эльф",
+    "Орк", "Гном", "Вампир", "Призрак", "Киберпанк"
+];
+        let a = document.querySelector('.button-password')
+        let b = document.querySelector('#nickname')
+
+        a.addEventListener('click', function generateNickname() {
+            b.textContent = adjectives[Math.ceil(Math.random() * adjectives.length - 1)] + ' ' + nouns[Math.ceil(Math.random() * nouns.length - 1)]
+        })
+    </script>
+</body>
+</html>

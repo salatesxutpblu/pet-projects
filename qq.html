@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Трекер задач</title>
+    <style>
+        .light-theme {
+            background-color: white;
+        }
+        .dark-theme {
+            background-color: DimGrey;
+        }
+       .container {
+        margin: auto;
+        display:flex;
+        flex-direction: column;
+        border: 2px solid black;
+        width: 600px;
+        height: 4000px;
+        text-align: center;
+       }
+       h1 {
+        font-style: italic;
+       }
+       p {
+        font-weight: bold;
+        font-size: 20px;
+       }
+       #btn-add {
+        width: 200px;
+        margin: auto;
+        margin-top: 10px;
+        margin-bottom: 0px;
+        border-radius: 5px;
+        font-style: italic;
+        color: black;
+        background-color: bisque;
+        border: none;
+       }
+       #btn-add hover {
+          background-color: brown;
+       }
+       .tasks-name {
+        font-style: italic;
+       }
+       #task-status {
+        width: 350px;
+        margin: auto;
+        margin-top: 10px;
+        margin-bottom: 0px;
+        border: none;
+       }
+       #name-task {
+         width: 350px;
+        margin: auto;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        border: 1px solid black;
+       }
+       .task {
+        width: 290px;
+        height: 200px;
+        border: 1px solid black;
+        background-color: grey;
+       }
+       .change-status {
+        background-color: gray;
+       }
+      .task2 {
+        width: 290px;
+        height: 200px;
+        border: 1px solid black;
+        background-color: darkblue;
+       }
+       .tasks {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 15px;
+       }
+       .delete-task {
+        background-color: red;
+       }
+       #filter-tasks {
+        margin: auto;
+        margin-top: 0px;
+        margin-bottom: 0px;
+       }
+    </style>
+</head>
+<body id="body" class="light-theme">
+    <div class="container">
+    <h1 id="title">Трекер задач</h1>
+    <label for="enable-theme">Чёрная тема</label>
+    <input type="checkbox" id="enable-theme">
+    <p>На данный момент задач: <span id="number-tasks">0</span></p>
+    <input type="text" id="name-task" placeholder="Название задачи">
+       <select id="task-status">
+                    <option value="done">Выполнена ✅</option>
+                    <option value="unDone">Не выполнена ❌</option>
+       </select>
+    <button id="btn-add">Добавить задачу</button>
+    <h3>Фильтр</h3>
+    <select id="filter-tasks">
+                    <option value="Все">Все</option>
+                    <option value="done">Выполненные</option>
+                    <option value="unDone">Активные</option>
+    </select>
+    <h2 class="tasks-name">Задачи</h2>
+    <div class="tasks">
+
+        <!--<div class="task">
+                <h2 class="task-name">Задача: Пройти майнкрафт</h2>
+                <p class="status-task">Статус: Выполнена ✅</p>
+                <button class="change-status">Поменять статус</button>
+        </div>
+        <div class="task2">
+                <h2 class="task-name">Задача: Пройти майнкрафт</h2>
+                <p class="status-task">Статус: Не выполнена ❌</p>
+                <button class="change-status">Поменять статус</button>
+        </div>-->
+    </div>
+    </div>
+    <script>
+        let numberTasks = document.querySelector('#number-tasks')
+        let taskStatus = document.querySelector('#task-status')
+        let htmlContainer = document.querySelector('.tasks')
+        let addbutton = document.querySelector('#btn-add')
+        let nameTask = document.querySelector('#name-task')
+        let filterTasks = document.querySelector('#filter-tasks')
+        let enableTheme = document.querySelector('#enable-theme')
+        if (enableTheme.checked) {
+            document.getElementById('body').classList.add('dark-theme');
+        }
+        let tasks = getTasks()
+        render()
+
+
+        function saveTasks() {
+            localStorage.setItem('tasks', JSON.stringify(tasks))
+        }
+
+        function getTasks() {
+             let tasks = localStorage.getItem('tasks')
+             if (tasks === null) {
+                return []
+             }
+             return JSON.parse(tasks)
+        }
+
+        function render() {
+            saveTasks()
+            let filteredTasks = getFilteredTasks()
+            let content = []
+            for ([i, task] of filteredTasks.entries()) {
+                let statusTask = ''
+                let textStatus = ''
+                if (task.status === 'done') {
+                    statusTask = 'task'
+                    textStatus = 'Выполнена ✅'
+                } else {
+                    statusTask = 'task2'
+                    textStatus = 'Не выполнена ❌'
+                }
+                content.push(`<div data-task-id="${i}" class="${statusTask}">
+                     <h2 class="task-name">Задача: ${task.name}</h2>
+                     <p class="status-task">Статус: ${textStatus}</p>
+                     <button class="change-status">Поменять статус</button>
+                     <button class="delete-task">Удалить задачу</button>
+             </div>`)
+             numberTasks.textContent = tasks.length
+
+            }
+                         htmlContainer.innerHTML = content.join('\n')
+        }
+        addbutton.addEventListener('click', function() {
+            addTask()
+        })
+        window.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addTask()
+            }
+        })
+
+        window.addEventListener('click', function(event) {
+            let el = event.target.closest('[data-task-id]')
+            if (!el) {
+                return
+            }
+            let id = Number(el.dataset.taskId)  
+            if (event.target.closest('.change-status')) {
+                if (tasks[id].status === 'done') {
+                    tasks[id].status = 'unDone'
+                } else {
+                    tasks[id].status = 'done'
+                }
+                render()
+            }
+            if (event.target.closest('.delete-task')) {
+                tasks.splice(id, 1)
+                render()
+            }
+        })
+
+            filterTasks.addEventListener('change', function() {
+                render()
+            })
+
+        function getFilteredTasks() {
+            let status = filterTasks.value
+            console.log(status)
+            if (status === 'Все') {
+                return tasks
+            }
+            let filteredTasks = tasks.filter(function(task) {
+                if (status === task.status) {
+                    return true
+                } else {
+                    return false
+                }
+            })
+            return filteredTasks
+        }
+
+        function addTask() {
+        let task = {
+        status:taskStatus.value,
+        name:nameTask.value,
+        }
+        console.log(task.name)
+        if (task.name === '') {
+            return
+        }
+         tasks.push(task)
+         render()
+            }
+            enableTheme.addEventListener('change', function() {
+                if (enableTheme.checked) {
+                    document.getElementById('body').classList.add('dark-theme');
+                } else {
+                    document.getElementById('body').classList.remove('dark-theme');
+                }
+            })
+    </script>
+</body>
+</html>

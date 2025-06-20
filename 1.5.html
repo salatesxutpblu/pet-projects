@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>This is the title</title>
+        <script>
+
+           function numbers () {
+            let res = 0
+            for (let a = 1; a <= 100; a++) {
+             res += a
+             console.log(res)
+            }
+           }
+
+           function numbers2 () {
+            let res = 0
+            for (let a = 1; a <= 100; a++) {
+             if (a % 2 === 0) {
+                res += a
+                console.log(res)
+             }
+            }
+           }
+
+           function numbers3 () {
+            let res = 0
+            for (let a = 1; a <= 100; a++) {
+             if (a % 2 !== 0) {
+                res += a
+                console.log(res)
+             }
+            }
+           }
+
+           function numbers4 (number1, number2) {
+               console.log(number1 % number2)
+           }
+
+           function numbers5 (word) {
+             let a = word.length - 1
+             while (a >= 0) {
+                console.log(word[a])
+                a = a - 1
+             }
+           }
+
+
+           numbers5('fsdsdsfddsdf')
+         </script>
+        </head>
+        <body>
+            <h1>1.5</h1>
+        </body>
+        </html>

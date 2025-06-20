@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>This is the title</title>
+        <script>
+            function isPositive(number) {
+              return number > 0;
+            }
+
+           function getStrLength(value) {
+            return value.length;
+           }
+
+           function getLastSymbol(value) {
+            return value[value.length - 1];
+           }
+
+           function isEven(number) {
+            return number % 2 === 0;
+           }
+
+           function firstLetterIsEqual(value, value2) {
+               return value[0] === value2[0];
+           }
+
+           function getLetter(value) {
+               if (value[value.length - 1] === 'ь') {
+                 console.log(value[value.length - 2]);
+               } else {
+                console.log(value[value.length - 1]);
+               }
+           }
+
+            if (isPositive(-1)) {
+                console.log('число положительно');
+            } else {
+                console.log('число отрицательное');
+            }
+
+            console.log(getStrLength('fdssdfsdfdf'));
+
+            console.log(getLastSymbol('fdssdfsdfdfddgd'));
+
+            if (isEven(8)) {
+                console.log('Чётное');
+            } else {
+                console.log('Не Чётное');
+            }
+
+            getLetter('ываыававasdljkljaskdjaskldть');
+
+            let obj = {a: 1, b: 2, c: 3};
+            for (let a in obj) {
+                console.log(obj[a])
+            }
+
+                      let c = [
+                        {'Имя':'ываолщывалд', 'Возраст':23432423},
+                        {'Имя':'ываолщывалд', 'Возраст':23432423},
+                        {'Имя':'ываолщывалд', 'Возраст':23432423},
+                      ]
+
+                      console.log(c[1])
+
+                      for (let user of c) {
+                       console.log(`Имя ${user['Имя']} Возраст ${user['Возраст']}`)
+                      }
+
+                      console.log(Math.random(1, 100))
+
+
+
+                      for (let a = 0; a < 100043443; a++) {
+                        console.log(Math.ceil(Math.random() * 123434234324))
+                      }
+         </script>
+        </head>
+        <body>
+            <h1>1.1</h1>
+        </body>
+        </html>

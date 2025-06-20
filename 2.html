@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+  <style>
+    html {
+        font-size: 30px;
+    }
+    body {
+        background-color: black;
+        display: flex;
+        justify-content: center;
+    }
+    input, button {
+        font-size: 100%;
+        padding: 10px;
+    }
+    p {
+        color: brown;
+        justify-content: center;
+        font-weight: bold;
+        margin: 0;
+    }
+    input {
+        text-align: center;
+        background-color: red;
+        border-radius: 10px;
+        border:none;
+
+    }
+    button {
+       background-color: aquamarine;
+       color:green;
+       border: none;
+       border-radius: 10px;
+    }
+    button:hover {
+       background-color:blue;
+       color:white;
+       border: none;
+       border-radius: 10px;
+    }
+    span {
+        color:brown;
+        font-weight: bold;
+    }
+    .ui1 {
+        max-width: 500px;
+    }  
+    .ui2 {
+        gap: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+      .nbnb {
+        color:brown;
+        font-weight: bold;
+        display: flex;
+        justify-content: center;
+      }
+  </style>
+	<body>
+        <div class="ui1">
+            <div class="ui2">
+        <h1 class="nbnb">Угадай число</h1>
+        <input class="abc">
+        <button class="aa">Проверить число</button>
+        <p class="ab">Результат:<span class="res" id="gg"> </span></p>
+        <p class="a">Количество попыток:<span class="res" id="ggg"> </span></p>
+        <button class="aaa">Начать заново</button>
+    </div>
+        </div>
+		<script>
+            let a = document.querySelector('.abc')
+            let d = document.querySelector('.aa')
+            let e = document.querySelector('.aaa')
+            let f = document.querySelector('#gg')
+            let g = document.querySelector('#ggg')
+
+            function setRes(res, tryCount) {
+                f.innerHTML = ' ' +  res
+                g.textContent = ' ' +  tryCount
+            }
+            let randomNumber = Math.ceil(Math.random() * 100)
+                        console.log(randomNumber)
+            let numberPopitka = 0
+            d.addEventListener('click', function() {
+                numberPopitka++
+                if (a.value == randomNumber) {
+                    setRes('Верно', numberPopitka)
+            } else {
+                setRes('Неверно', numberPopitka)
+            }
+            })
+
+            e.addEventListener('click', function() {
+                randomNumber = Math.ceil(Math.random() * 100)
+                setRes('', 0)
+                numberPopitka = 0
+            })
+		</script>
+	</body>
+</html>
