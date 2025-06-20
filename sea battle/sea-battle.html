@@ -133,6 +133,9 @@
           class: 'cell',
           dataId: id
         }
+        if (i === 2) {
+          cellObject.hasShip = true
+        }
         if (id === 'player-board') {
           playerBoard.push(cellObject)
         } else {
@@ -148,12 +151,11 @@
         board.innerHTML = content.join('\n')
         }
       }
-     board.innerHTML = content.join('\n')
+      board.innerHTML = content.join('\n')
     }
 
     createBoard('player-board', 'first');
     createBoard('enemy-board', 'first');
-    randomShips('enemy-board')
 
     window.addEventListener('click', function(event) {
       if (statusGame !== true) {
@@ -166,16 +168,20 @@
       let boardPlayer = el.dataset.id
       let id = el.dataset.cellId
       let cellPlayer = ''
+      if (enemyBoard[id].miss === false) {
+        enemyBoard[id].class = 'cell-flipped'
+
+      }
       if (boardPlayer === 'player-board') {
         return
       } else {
-        if (enemyBoard[id].miss === true) {
-          return
-        }
         if (enemyBoard[id].hit === true) {
           return
         }
-        if (enemyBoard[id].hasShip === false ) {
+        if (enemyBoard[id].miss === true) {
+          return
+        }
+        if (enemyBoard[id].hasShip === false) {
           enemyBoard[id].miss === true
         }
         if (enemyBoard[id].hasShip === true) {
@@ -201,10 +207,10 @@
         }
         for (cellObject of enemyBoard) {
           if (cellObject.miss === true) {
-            cellObject.class = 'cell flipped'
+            cellObject.class = 'cell-flipped'
           }
         }
-        createBoard('enemy-board', 'unfirst');
+        createBoard('enemy-board', 'unfirst')
         }
       }
     )
@@ -212,39 +218,6 @@
     startBtn.addEventListener('click', function() {
       statusGame = true
     })
-    function randomShips(board) {
-      let random1 = [1,2,3,4,5,6,7,8,9,10]
-      random1 = random1.sort(() => Math.random() - 0.5);
-      let ships = [1,1,1,1,2,2,2,3,3,4]
-      ships = ships.sort(() => Math.random() - 0.5);
-      for (let a = 0; a < 10; a++) {
-          randomCell = String(random1[a]) + String(random1[a])
-          randomCell = Number(randomCell)
-          if (board === 'enemy-board') {
-            if (ships[a] === 1) {
-              console.log(randomCell)
-               enemyBoard[Number(randomCell)].hasShip = true
-            }
-            if (ships[a] === 2) {
-               enemyBoard[Number(randomCell)].hasShip = true
-              enemyBoard[Number(randomCell) + 1].hasShip = true
-            }
-            if (ships[a] === 3) {
-               enemyBoard[Number(randomCell)].hasShip = true
-               enemyBoard[Number(randomCell) + 1].hasShip = true
-               enemyBoard[Number(randomCell) + 2].hasShip = true
-            }
-            if (ships[a] === 4) {
-               enemyBoard[Number(randomCell)].hasShip = true
-               enemyBoard[Number(randomCell) + 1].hasShip = true
-               enemyBoard[Number(randomCell) + 2].hasShip = true
-               enemyBoard[Number(randomCell) + 3].hasShip = true    
-            }
-          }
-      }
-      createBoard('enemy-board', 'unfirst')
-      console.log(enemyBoard)
-    }
 
   </script>
 </body>
