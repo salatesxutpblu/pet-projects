@@ -69,6 +69,14 @@
       box-sizing: border-box;
       cursor: pointer;
     }
+    .cell-hit {
+      width: 40px;
+      height: 40px;
+      background-color: #eb0000;
+      border: 2px solid #eb0000;
+      box-sizing: border-box;
+      cursor: pointer;
+    }
 
     .cell:hover {
       background-color: #aaffaa;
@@ -156,6 +164,8 @@
 
     createBoard('player-board', 'first');
     createBoard('enemy-board', 'first');
+    randomShips(enemyBoard)
+    randomShips(playerBoard)
 
     window.addEventListener('click', function(event) {
       if (statusGame !== true) {
@@ -181,33 +191,19 @@
         if (enemyBoard[id].miss === true) {
           return
         }
+        if (enemyBoard[id].hasShip === true) {
+          enemyBoard[id].hit = true
+          enemyBoard[id].miss = 'sss' 
+        }
         if (enemyBoard[id].hasShip === false) {
           enemyBoard[id].miss === true
-        }
-        if (enemyBoard[id].hasShip === true) {
-          enemyBoard[id].hit === true
-          if (enemyBoard[id - 1].hasShip === true && enemyBoard[id + 1].hasShip === true) {
-            enemyBoard[id - 10].miss === true
-            enemyBoard[id + 10].miss === true
-          }
-          if (enemyBoard[id - 1].hasShip === true && enemyBoard[id + 1].hasShip === false) {
-            enemyBoard[id - 10].miss === true
-            enemyBoard[id + 10].miss === true
-            enemyBoard[id - 11].miss === true
-            enemyBoard[id + 11].miss === true
-            enemyBoard[id + 1].miss === true
-          }
-          if (enemyBoard[id - 1].hasShip === false && enemyBoard[id + 1].hasShip === true) {
-            enemyBoard[id - 10].miss === true
-            enemyBoard[id + 10].miss === true
-            enemyBoard[id - 9].miss === true
-            enemyBoard[id + 9].miss === true
-            enemyBoard[id - 1].miss === true
-          }
         }
         for (cellObject of enemyBoard) {
           if (cellObject.miss === true) {
             cellObject.class = 'cell-flipped'
+          }
+          if (cellObject.hit === true) {
+            cellObject.class = 'cell-hit'
           }
         }
         createBoard('enemy-board', 'unfirst')
@@ -218,6 +214,73 @@
     startBtn.addEventListener('click', function() {
       statusGame = true
     })
+
+    function randomShips(board) {
+      let ships = [1,1,1,1,2,2,2,3,3,4]
+      for (let a = 0; a < 10; a++) {
+        let ship = ships[a]
+        if (ship === 1) {
+          let randomNumber1 = Math.ceil(Math.random() * 99)
+          if (randomNumber1 > 100) {
+            randomNumber1 = randomNumber1 - 1
+          }
+          board[randomNumber1].hasShip = true
+        }
+        if (ship === 2) {
+          let randomNumber1 = Math.ceil(Math.random() * 99)
+          let randomNumber2 = Math.ceil(Math.random() * 99)
+          let randomNumber3 = Math.ceil(Math.random() * 99)
+          if (randomNumber1 > 100) {
+            randomNumber1 = randomNumber1 - 1
+          }
+          if (randomNumber2 > 100) {
+            randomNumber2 = randomNumber1 - 2
+          }
+          board[randomNumber1].hasShip = true
+          board[randomNumber2].hasShip = true
+        }
+        if (ship === 3) {
+          let randomNumber1 = Math.ceil(Math.random() * 99)
+          let randomNumber2 = Math.ceil(Math.random() * 99)
+          let randomNumber3 = Math.ceil(Math.random() * 99)
+          if (randomNumber1 > 100) {
+            randomNumber1 = randomNumber1 - 1
+          }
+          if (randomNumber2 > 100) {
+            randomNumber2 = randomNumber1 - 2
+          }
+          if (randomNumber3 > 100) {
+            randomNumber3 = randomNumber3 - 3
+          }
+          board[randomNumber1].hasShip = true
+          board[randomNumber2].hasShip = true
+          board[randomNumber3].hasShip = true
+        }
+        if (ship === 4) {
+          let randomNumber1 = Math.ceil(Math.random() * 99)
+          let randomNumber2 = randomNumber1 + 1
+          let randomNumber3 = randomNumber1 + 2
+          let randomNumber4 = randomNumber1 + 3
+          if (randomNumber1 > 100) {
+            randomNumber1 = randomNumber1 - 1
+          }
+          if (randomNumber2 > 100) {
+            randomNumber2 = randomNumber1 - 2
+          }
+          if (randomNumber3 > 100) {
+            randomNumber3 = randomNumber3 - 3
+          }
+          if (randomNumber4 > 100) {
+            randomNumber4 = randomNumber4 - 4
+          }
+          board[randomNumber1].hasShip = true
+          board[randomNumber2].hasShip = true
+          board[randomNumber3].hasShip = true
+          board[randomNumber4].hasShip = true
+        }
+        
+      }
+    }
 
   </script>
 </body>
