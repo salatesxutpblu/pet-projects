@@ -139,7 +139,10 @@
           status: false,
           id: i,
           class: 'cell',
-          dataId: id
+          dataId: id,
+          length: 0,
+          coords: 0,
+          missShip: false
         }
         if (i === 2) {
           cellObject.hasShip = true
@@ -218,46 +221,7 @@
     function randomShips(board) {
       let ships = [1,1,1,1,2,2,2,3,3,4]
       for (let a = 0; a < 10; a++) {
-        let ship = ships[a]
-        if (ship === 1) {
-          let randomNumber1 = Math.ceil(Math.random() * 99)
-          if (randomNumber1 > 100) {
-            randomNumber1 = randomNumber1 - 1
-          }
-          board[randomNumber1].hasShip = true
-        }
-        if (ship === 2) {
-          let randomNumber1 = Math.ceil(Math.random() * 99)
-          let randomNumber2 = Math.ceil(Math.random() * 99)
-          let randomNumber3 = Math.ceil(Math.random() * 99)
-          if (randomNumber1 > 100) {
-            randomNumber1 = randomNumber1 - 1
-          }
-          if (randomNumber2 > 100) {
-            randomNumber2 = randomNumber1 - 2
-          }
-          board[randomNumber1].hasShip = true
-          board[randomNumber2].hasShip = true
-        }
-        if (ship === 3) {
-          let randomNumber1 = Math.ceil(Math.random() * 99)
-          let randomNumber2 = Math.ceil(Math.random() * 99)
-          let randomNumber3 = Math.ceil(Math.random() * 99)
-          if (randomNumber1 > 100) {
-            randomNumber1 = randomNumber1 - 1
-          }
-          if (randomNumber2 > 100) {
-            randomNumber2 = randomNumber1 - 2
-          }
-          if (randomNumber3 > 100) {
-            randomNumber3 = randomNumber3 - 3
-          }
-          board[randomNumber1].hasShip = true
-          board[randomNumber2].hasShip = true
-          board[randomNumber3].hasShip = true
-        }
-        if (ship === 4) {
-          let randomNumber1 = Math.ceil(Math.random() * 99)
+      let randomNumber1 = Math.ceil(Math.random() * 99)
           let randomNumber2 = randomNumber1 + 1
           let randomNumber3 = randomNumber1 + 2
           let randomNumber4 = randomNumber1 + 3
@@ -273,10 +237,85 @@
           if (randomNumber4 > 100) {
             randomNumber4 = randomNumber4 - 4
           }
+          randomNumber1 = String(randomNumber1)
+          randomNumber2 = String(randomNumber2)
+          randomNumber3 = String(randomNumber3)
+          randomNumber4 = String(randomNumber4)
+          if (randomNumber1[1] === '9' && ships[a] === 2
+           || randomNumber1[1] === '9' && ships[a] === 3
+            || randomNumber1[1] === '9' && ships[a] === 4) {
+              if (ships[a] === 2) {
+                let tempNumber = randomNumber1[0]
+                randomNumber2 = tempNumber + '8'
+              }
+              if (ships[a] === 3) {
+                let tempNumber = randomNumber1[0]
+                randomNumber2 = tempNumber + '8'
+                randomNumber3 = tempNumber + '7'
+              }
+              if (ships[a] === 4) {
+                let tempNumber = randomNumber1[0]
+                randomNumber2 = tempNumber + '8'
+                randomNumber3 = tempNumber + '7'
+                randomNumber4 = tempNumber + '6'
+              } 
+            }
+            if (randomNumber1[1] === '8' && ships[a] === 3) {
+              let tempNumber = randomNumber1[0]
+              randomNumber3 = tempNumber + '7'
+            }
+            if (randomNumber1[1] === '8' && ships[a] === 4) {
+              let tempNumber = randomNumber1[0]
+              randomNumber3 = tempNumber + '7'
+              randomNumber4 = tempNumber + '6'
+            }
+            if (randomNumber1[1] === '7' && ships[a] === 4) {
+              let tempNumber = randomNumber1[0]
+              randomNumber4 = tempNumber + '6'
+            }
+            randomNumber1 = Number(randomNumber1)
+            randomNumber2 = Number(randomNumber2)
+            randomNumber3 = Number(randomNumber3)
+            randomNumber4 = Number(randomNumber4)
+            console.log(randomNumber1, randomNumber2, randomNumber3, randomNumber4)
+        let ship = ships[a]
+        if (ship === 1) {
           board[randomNumber1].hasShip = true
+          board[randomNumber1].length = 2
+          board[randomNumber1].coords = [randomNumber1, randomNumber2]
+        }
+        if (ship === 2) {
+          board[randomNumber1].hasShip = true
+          board[randomNumber1].length = 2
+          board[randomNumber1].coords = [randomNumber1, randomNumber2]
           board[randomNumber2].hasShip = true
+          board[randomNumber2].length = 2
+          board[randomNumber2].coords = [randomNumber1, randomNumber2]
+        }
+        if (ship === 3) {
+          board[randomNumber1].hasShip = true
+          board[randomNumber1].length = 3
+          board[randomNumber1].coords = [randomNumber1, randomNumber2, randomNumber3]
+          board[randomNumber2].hasShip = true
+          board[randomNumber2].length = 3
+          board[randomNumber2].coords = [randomNumber1, randomNumber2, randomNumber3]
           board[randomNumber3].hasShip = true
+          board[randomNumber3].length = 3
+          board[randomNumber3].coords = [randomNumber1, randomNumber2, randomNumber3]
+        }
+        if (ship === 4) {
+          board[randomNumber1].hasShip = true
+          board[randomNumber1].length = 4
+          board[randomNumber1].coords = [randomNumber1, randomNumber2, randomNumber3, randomNumber4]
+          board[randomNumber2].hasShip = true
+          board[randomNumber2].length = 4
+          board[randomNumber2].coords = [randomNumber1, randomNumber2, randomNumber3, randomNumber4]
+          board[randomNumber3].hasShip = true
+          board[randomNumber3].length = 4
+          board[randomNumber3].coords = [randomNumber1, randomNumber2, randomNumber3, randomNumber4]
           board[randomNumber4].hasShip = true
+          board[randomNumber4].length = 4
+          board[randomNumber4].coords = [randomNumber1, randomNumber2, randomNumber3, randomNumber4]
         }
         
       }
